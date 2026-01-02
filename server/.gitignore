@@ -38,3 +38,6 @@ ehthumbs.db
 
 # Optional: if you're on Windows using VS Code
 .vscode/
+
+
+.env
