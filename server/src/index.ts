@@ -1,19 +1,25 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import router from './routes/index';
-import { pino } from 'pino';
+import uploadRoutes from './routes/upload.routes';
 
+// Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const logger = pino({ transport: { target: 'pino-pretty' } });
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'], // Add your client URLs
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(express.json());
-app.use('/api', router);
 
+// Routes
+app.use('/api', uploadRoutes);
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  logger.info(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
